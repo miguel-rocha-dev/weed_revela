@@ -58,6 +58,7 @@ public class Banco{
                 }
             }
             System.out.println("Olá " + clienteLogado.nome + "! Bem vindo ao Weed Revela!");
+            saidaMenu:
             while (true){
                 System.out.println("===== BANCO Weed Revela  =====");
                 System.out.println("1 - Consultar saldo");
@@ -69,6 +70,10 @@ public class Banco{
                 System.out.println("Escolha uma opção:");
                 int opcao = leia.nextInt();
                 switch(opcao){ // depois trocar isso aqui por um RULE SWITCH
+                    case 0:
+                        System.out.println("até a próxima vez!");
+                        break saidaMenu;
+
                     case 1:
                         //aqui vai chamar a função de consultar saldo
                         break;
