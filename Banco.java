@@ -18,6 +18,7 @@ public class Banco{
     }
 
     public static void main(String[] args){
+        
         Cliente[] listaClientes = new Cliente[2]; // começar a criar os dois exemplos de cliente
         Cliente cliente1 = new Cliente();
         cliente1.id = 1;
@@ -39,24 +40,27 @@ public class Banco{
 
         listaClientes[0]  = cliente1; // atribuindo ao array de lista clientes
         listaClientes[1]  = cliente2; // atribuindo ao array de lista clientes
-
-        Cliente clienteLogado; // Quando o login for realizado, vamos saber qual foi o cliente que logou
-        System.out.println("Olá! Bem vindo ao sistema bancário do Weed Revela!");
-        System.out.println("Para prosseguir, Por favor, realize o login:");
-        try(Scanner leia = new Scanner(System.in)){ // aqui eu to imaginando a página de login inicial
-            validacao: // aqui eu criei um rótulo, pra n ficar preso dentro do loop de verificar o 
+        while(true){
+            Cliente clienteLogado; // Quando o login for realizado, vamos saber qual foi o cliente que logou
+            System.out.println("Olá! Bem vindo ao sistema bancário do Weed Revela!");
+            System.out.println("Para prosseguir, Por favor, realize o login:");
+            Scanner leia = new Scanner(System.in);
+            validacao: // aqui eu criei um rótulo, pra n ficar preso dentro do loop de verificar o login
             while (true){
                 System.out.println("Digite o seu CPF sem pontos e traços: \n");
                 String checarCPF = leia.next();
                 System.out.println("Digite a sua senha: \n");
                 String checarSenha = leia.next();
+                
                 for(Cliente cliente : listaClientes){
                     if(checarCPF.equals(cliente.CPF) && checarSenha.equals(cliente.senha)){
                         clienteLogado = cliente; // O cliente logado vai receber o cliente que entrou e dps sai do while true
                         break validacao;
                     }
                 }
+                System.out.println("Credenciais incorretas! Tente novamente.");
             }
+
             System.out.println("Olá " + clienteLogado.nome + "! Bem vindo ao Weed Revela!");
             saidaMenu:
             while (true){
@@ -71,7 +75,7 @@ public class Banco{
                 int opcao = leia.nextInt();
                 switch(opcao){ // depois trocar isso aqui por um RULE SWITCH
                     case 0:
-                        System.out.println("até a próxima vez!");
+                        System.out.println("até a próxima vez! \n");
                         break saidaMenu;
 
                     case 1:
@@ -93,9 +97,6 @@ public class Banco{
                         System.out.println("Entrada inválida!"); // depois arruma para ele fazer um loop infinito de perguntar a opção
                 }
             }
-            
-
-            
         }
     }
 }
