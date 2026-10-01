@@ -1,5 +1,4 @@
 import java.util.Scanner;
-
 public class Banco{
     public class Extrato{
         int id;
@@ -15,6 +14,46 @@ public class Banco{
         String agencia;
         Double saldo;
         String senha;
+    }
+
+    //Fução do PIX - Versão beta 1.0v (CASO MODIFICADO, ALTERAR A VERSÃO BETA PARA 1.1v!)
+
+    //Utilizando para criar a leitura do Scanner
+    static Scanner leia = new Scanner(System.in);
+
+    static void realizarSaquePix(Cliente cliente) {
+        System.out.println("Digite o valor do Pix:");
+        double valor = leia.nextDouble();
+        //Caso o valor seja 0 ou menor que 0:
+        if (valor <= 0) {
+            System.out.println("Valor Inválido!");
+        //Caso o valor seja maior que o saldo do cliente
+        }else if (valor > cliente.saldo){
+            System.out.println("Saldo insuficiente!");
+        //A realização do Pix
+        }else{
+            cliente.saldo -= valor;
+            System.out.println("Pix de R$ " + valor + " realizado!");  
+        }
+    }
+
+    //Fução do TED - Versão beta 1.0v (CASO MODIFICADO, ALTERAR A VERSÃO BETA PARA 1.1v!)
+    static void realizarSaqueTed(Cliente cliente) {
+        System.out.println("Digite o valor do TED: ");
+        double valor = leia.nextDouble();
+        //Valor da taxa do TED
+        double taxa = 15.67;
+
+        //Utilizando mesma estrategia do Pix
+        if(valor < 0) {
+            System.out.println("Valor Inválido");
+        }else if (valor + taxa > cliente.saldo) {
+            System.out.println("Saldo insuficiente");
+        }else{
+            //Aqui e quando o valor e a taxa se somam e logo é enviado para o cliente
+            cliente.saldo -= (valor + taxa);
+            System.out.println("TED de R$: " + valor + " Realido! Taxa: R$ " + taxa);
+        }
     }
 
     public static void main(String[] args){
@@ -85,6 +124,21 @@ public class Banco{
                         //aqui vai chamar a função de realizar depósito
                         break;
                     case 3:
+                        System.out.println("1 - Realizar por PIX");
+                        System.out.println("2 - Transferecia por TED");
+                        System.out.println("Escolha uma opção:");
+                        int menusaque = leia.nextInt();
+                        switch (menusaque) {
+                            case 1:
+                                realizarSaquePix(clienteLogado);
+                                break;
+                            case 2:
+                                realizarSaqueTed(clienteLogado);
+                                break;
+                            default:
+                                System.out.println("Opção invalida ");
+                                break;
+                        }
                         // agora aqui é a função de realizar saque
                         break;
                     case 4:
