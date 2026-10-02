@@ -1,3 +1,4 @@
+import java.util.List;
 import java.util.Scanner;
 public class Banco{
     public class Extrato{
@@ -14,8 +15,8 @@ public class Banco{
         String agencia;
         Double saldo;
         String senha;
+        String chavePix;
     }
-
 
     //Utilizando para criar a leitura do Scanner
     static Scanner leia = new Scanner(System.in);
@@ -127,9 +128,18 @@ public class Banco{
                 System.out.println("3 - Realizar saque");
                 System.out.println("4 - Exibir extrato");
                 System.out.println("5 - Mostrar maior depósito");
+                System.out.println("6 - Realizar transferência");
                 System.out.println("0 - Sair");
                 System.out.println("Escolha uma opção:");
-                int opcao = leia.nextInt();
+                int opcao;
+
+                while(true){
+                    opcao = leia.nextInt();
+                    if(List.of(1,2,3,4,5,6,0).contains(opcao)){
+                        break;
+                    }
+                    System.out.println("Opção inválida! Escreva novamente");
+                }
                 switch(opcao){ // depois trocar isso aqui por um RULE SWITCH
                     case 0:
                         System.out.println("até a próxima vez! \n");
@@ -145,21 +155,7 @@ public class Banco{
                         realizarDeposito(clienteLogado);
                         break;
                     case 3:
-                        System.out.println("1 - Realizar por PIX");
-                        System.out.println("2 - Transferecia por TED");
-                        System.out.println("Escolha uma opção:");
-                        int menusaque = leia.nextInt();
-                        switch (menusaque) {
-                            case 1:
-                                realizarSaquePix(clienteLogado);
-                                break;
-                            case 2:
-                                realizarSaqueTed(clienteLogado);
-                                break;
-                            default:
-                                System.out.println("Opção invalida ");
-                                break;
-                        }
+                        
                         // agora aqui é a função de realizar saque
                         break;
                     case 4:
@@ -168,8 +164,28 @@ public class Banco{
                     case 5:
                         // aqui vai mostrar o maior depósito já realizado
                         break;
-                    default:
-                        System.out.println("Entrada inválida!"); // depois arruma para ele fazer um loop infinito de perguntar a opção
+                    case 6:
+                        System.out.println("1 - Realizar por PIX");
+                        System.out.println("2 - Transferecia por TED");
+                        System.out.println("Escolha uma opção:");
+                        int menusaque;
+                        while(true){ // adicionei só uma verificação caso o usuário erre o número
+                            menusaque = leia.nextInt();
+                            if (menusaque > 0 && menusaque < 3){
+                                break;
+                            }
+                            System.out.println("Opção inválida! Escreva apenas 1 ou 2 !");
+                        }
+                        
+                        switch (menusaque) {
+                            case 1:
+                                realizarSaquePix(clienteLogado);
+                                break;
+                            case 2:
+                                realizarSaqueTed(clienteLogado);
+                                break;
+                        }
+                        break;
                 }
             }
         }
