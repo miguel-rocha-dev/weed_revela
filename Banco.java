@@ -16,11 +16,29 @@ public class Banco{
         String senha;
     }
 
-    //Fução do PIX - Versão beta 1.0v (CASO MODIFICADO, ALTERAR A VERSÃO BETA PARA 1.1v!)
 
     //Utilizando para criar a leitura do Scanner
     static Scanner leia = new Scanner(System.in);
 
+
+    static double consultarSaldo(Cliente cliente){
+        return cliente.saldo;
+    }
+
+    // Função de Realizar Depósito abaixo playbas
+    static void realizarDeposito(Cliente cliente){
+        System.out.print("Digite o valor que deseja depositar:");
+        double valor = leia.nextDouble();
+        if( valor<=0){
+            System.out.print("Depósito Inválido!");
+        }
+        else{
+            cliente.saldo += valor;
+            System.out.printf("Depósito de R$.2f realizado com sucesso!", valor);
+        }
+    }
+
+    //Fução do PIX - Versão beta 1.0v (CASO MODIFICADO, ALTERAR A VERSÃO BETA PARA 1.1v!)
     static void realizarSaquePix(Cliente cliente) {
         System.out.println("Digite o valor do Pix:");
         double valor = leia.nextDouble();
@@ -119,9 +137,12 @@ public class Banco{
 
                     case 1:
                         //aqui vai chamar a função de consultar saldo
+                        Double saldoAtual = consultarSaldo(clienteLogado);
+                        System.out.printf("\nSeu saldo atual é: R$ %.2f\n\n", saldoAtual);
                         break;
                     case 2:
                         //aqui vai chamar a função de realizar depósito
+                        realizarDeposito(clienteLogado);
                         break;
                     case 3:
                         System.out.println("1 - Realizar por PIX");
