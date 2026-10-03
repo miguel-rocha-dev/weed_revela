@@ -70,9 +70,16 @@ public class Banco{
     }
 
     static Extrato maiorDeposito(Cliente cliente){
-        Extrato extratoMaiorDeposito = cliente.listaExtratos[0];
-        for (int i= 0; i < cliente.listaExtratos.size(); i++){
-           
+        Extrato extratoMaiorDeposito = new Extrato();
+        extratoMaiorDeposito = cliente.listaExtratos.get(0);
+        for (int i= 1; i < cliente.listaExtratos.size(); i++){
+            Extrato comparativo = new Extrato();
+            comparativo = cliente.listaExtratos.get(i);
+            if (comparativo.tipoTrasacao.equals("Depósito") && extratoMaiorDeposito.tipoTrasacao.equals("Depósito") ){
+                if(extratoMaiorDeposito.valorMovimentacao < comparativo.valorMovimentacao){
+                    extratoMaiorDeposito = comparativo;
+                }
+           }
         }
         
         return extratoMaiorDeposito;
@@ -181,7 +188,12 @@ public class Banco{
                         break;
                     case 5:
                         // aqui vai mostrar o maior depósito já realizado
-                        maiorDeposito(clienteLogado);
+                        Extrato maiorDepRealizado = maiorDeposito(clienteLogado);
+                        System.out.println("-------------------------------------------");
+                        System.out.println("Tipo do depósito: " + maiorDepRealizado.tipoTrasacao);
+                        System.out.println("Valor: R$" + maiorDepRealizado.valorMovimentacao);
+                        System.out.println("-------------------------------------------");
+
                         break;
                     case 6:
                         System.out.println("1 - Realizar por PIX");
