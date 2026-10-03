@@ -70,10 +70,10 @@ public class Banco{
     }
 
     static Extrato maiorDeposito(Cliente cliente){
-        Extrato extratoMaiorDeposito = new Extrato();
+        Extrato extratoMaiorDeposito;
         extratoMaiorDeposito = cliente.listaExtratos.get(0);
         for (int i= 1; i < cliente.listaExtratos.size(); i++){
-            Extrato comparativo = new Extrato();
+            Extrato comparativo;
             comparativo = cliente.listaExtratos.get(i);
             if (comparativo.tipoTrasacao.equals("Depósito") && extratoMaiorDeposito.tipoTrasacao.equals("Depósito") ){
                 if(extratoMaiorDeposito.valorMovimentacao < comparativo.valorMovimentacao){
