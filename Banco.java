@@ -1,14 +1,15 @@
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 public class Banco{
-    public class Extrato{
-        int id;
-        String tipoTrasacao;
-        float valorMovimentacao;
+    public static class Extrato{
+        String tipoTrasacao; // aqui só existem 3 tipos: depósito, saque ou transferência
+        Double valorMovimentacao; // aqui aparece o valor do tipo da transação
     }
+    
+     // criação da lista de extratos
 
     public static class Cliente{
-        int id;
         String nome;
         String conta;
         String CPF;
@@ -16,7 +17,11 @@ public class Banco{
         Double saldo;
         String senha;
         String chavePix;
+        List<Extrato> listaExtratos = new ArrayList<>(); // criei uma lista de extratos aqui, pq assim cada cliente tem seu extrato 
     }
+
+    
+
 
     static double consultarSaldo(Cliente cliente){
         return cliente.saldo;
@@ -25,47 +30,78 @@ public class Banco{
     // Função de Realizar Depósito abaixo playbas
     static void realizarDeposito(Cliente cliente, Double valorDeposito){
         cliente.saldo += valorDeposito; // ajeitei a função para ela apenas executar
+        Extrato extratoTemporario = new Extrato();
+        extratoTemporario.tipoTrasacao = "Depósito";
+        extratoTemporario.valorMovimentacao = valorDeposito;
+        cliente.listaExtratos.add(extratoTemporario);
+        
+
     }
 
     //Fução do PIX - Versão beta 1.0v (CASO MODIFICADO, ALTERAR A VERSÃO BETA PARA 1.1v!)
-    static void realizarTranferenciaPix(Cliente clientePagador, Cliente ClienteRecebedor, Double valorTransferencia) {
+    static void realizarTranferenciaPix(Cliente clientePagador, Cliente clienteRecebedor, Double valorTransferencia) {
         //aqui deve ficar apenas a redução do saldo do cliente pagador
         //aumento do saldo do cliente recebedor
         //a integração ao extrato deixa que eu faço (Miguel)
+        Extrato extratoPagador = new Extrato();
+        Extrato extratoRecebedor = new Extrato();
+        extratoPagador.tipoTrasacao = "Transferência";
+        extratoRecebedor.tipoTrasacao = "Transferência";
+        extratoPagador.valorMovimentacao = valorTransferencia;
+        extratoRecebedor.valorMovimentacao = valorTransferencia;
+        clientePagador.listaExtratos.add(extratoPagador);
+        clienteRecebedor.listaExtratos.add(extratoRecebedor);
         
     }
 
     //Fução do TED - Versão beta 1.0v (CASO MODIFICADO, ALTERAR A VERSÃO BETA PARA 1.1v!)
-    static void realizarTransferenciaTed(Cliente clientePagador, Double taxa, Cliente clienteRecebedor) {
+    static void realizarTransferenciaTed(Cliente clientePagador, Double taxa, Cliente clienteRecebedor, Double valorTransferencia) {
         //aqui deve ficar apenas a redução do saldo do cliente pagador
         //aumento do saldo do cliente recebedor
         //a integração ao extrato deixa que eu faço (Miguel)
+        Extrato extratoPagador = new Extrato();
+        Extrato extratoRecebedor = new Extrato();
+        extratoPagador.tipoTrasacao = "Transferência";
+        extratoRecebedor.tipoTrasacao = "Transferência";
+        extratoPagador.valorMovimentacao = valorTransferencia+taxa; 
+        extratoRecebedor.valorMovimentacao = valorTransferencia+taxa;
+        clientePagador.listaExtratos.add(extratoPagador);
+        clienteRecebedor.listaExtratos.add(extratoRecebedor);
+    }
 
+    static Extrato maiorDeposito(Cliente cliente){
+        Extrato extratoMaiorDeposito = cliente.listaExtratos[0];
+        for (int i= 0; i < cliente.listaExtratos.size(); i++){
+           
+        }
+        
+        return extratoMaiorDeposito;
     }
 
     public static void main(String[] args){
         
         Cliente[] listaClientes = new Cliente[2]; // começar a criar os dois exemplos de cliente
         Cliente cliente1 = new Cliente();
-        cliente1.id = 1;
         cliente1.nome = "Roberto";
         cliente1.conta = "123";
         cliente1.CPF = "12345678900";
         cliente1.agencia = "456";
         cliente1.saldo = 1000.0;
         cliente1.senha = "senha-secreta";
+        cliente1.senha = "chavepix2";
 
         Cliente cliente2 = new Cliente();
-        cliente2.id = 2;
         cliente2.nome = "Cláudio";
         cliente2.conta = "678";
         cliente2.CPF = "23412345699";
         cliente2.agencia = "789";
         cliente2.saldo = 1000.0;
         cliente2.senha = "senha-mais-secreta";
+        cliente2.senha = "chavepix1";
 
         listaClientes[0]  = cliente1; 
         listaClientes[1]  = cliente2; // O array listaClientes armazenará todos os clientes do nosso sistema
+        
         while(true){
             Cliente clienteLogado; // Quando o login for realizado, vamos saber qual foi o cliente que logou
             System.out.println("Olá! Bem vindo ao sistema bancário do Weed Revela!");
@@ -136,9 +172,16 @@ public class Banco{
                         break;
                     case 4:
                         // aqui é a função de exibir o extrato
+                        System.out.println("-------------------------------------------");
+                        for( Extrato item : clienteLogado.listaExtratos){
+                            System.out.println("Tipo de transação: " + item.tipoTrasacao);
+                            System.out.println("Valor: R$" + item.valorMovimentacao);
+                            System.out.println("------------------------------------------- \n");
+                        }
                         break;
                     case 5:
                         // aqui vai mostrar o maior depósito já realizado
+                        maiorDeposito(clienteLogado);
                         break;
                     case 6:
                         System.out.println("1 - Realizar por PIX");
