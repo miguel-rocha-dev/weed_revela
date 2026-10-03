@@ -128,7 +128,7 @@ public class Banco{
                         else{
                             realizarDeposito(clienteLogado, valor);
                             System.out.printf("Depósito de R$ %.2f%n realizado com sucesso!", valor);
-        }
+                        }
                         break;
                     case 3:
                         
