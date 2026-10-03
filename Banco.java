@@ -36,8 +36,10 @@ public class Banco{
     }
 
     //Fução do TED - Versão beta 1.0v (CASO MODIFICADO, ALTERAR A VERSÃO BETA PARA 1.1v!)
-    static void realizarSaqueTed(Cliente cliente, Double taxa) {
-        //
+    static void realizarSaqueTed(Cliente clientePagador, Double taxa, Cliente clienteRecebedor) {
+        //aqui deve ficar apenas a redução do saldo do cliente pagador
+        //aumento do saldo do cliente recebedor
+        //a integração ao extrato deixa que eu faço (Miguel)
 
     }
 
