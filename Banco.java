@@ -18,61 +18,27 @@ public class Banco{
         String chavePix;
     }
 
-    //Utilizando para criar a leitura do Scanner
-    static Scanner leia = new Scanner(System.in);
-
-
     static double consultarSaldo(Cliente cliente){
         return cliente.saldo;
     }
 
     // Função de Realizar Depósito abaixo playbas
-    static void realizarDeposito(Cliente cliente){
-        System.out.print("Digite o valor que deseja depositar:");
-        double valor = leia.nextDouble();
-        if( valor<=0){
-            System.out.print("Depósito Inválido!");
-        }
-        else{
-            cliente.saldo += valor;
-            System.out.printf("Depósito de R$.2f realizado com sucesso!", valor);
-        }
+    static void realizarDeposito(Cliente cliente, Double valorDeposito){
+        cliente.saldo += valorDeposito; // ajeitei a função para ela apenas executar
     }
 
     //Fução do PIX - Versão beta 1.0v (CASO MODIFICADO, ALTERAR A VERSÃO BETA PARA 1.1v!)
-    static void realizarSaquePix(Cliente cliente) {
-        System.out.println("Digite o valor do Pix:");
-        double valor = leia.nextDouble();
-        //Caso o valor seja 0 ou menor que 0:
-        if (valor <= 0) {
-            System.out.println("Valor Inválido!");
-        //Caso o valor seja maior que o saldo do cliente
-        }else if (valor > cliente.saldo){
-            System.out.println("Saldo insuficiente!");
-        //A realização do Pix
-        }else{
-            cliente.saldo -= valor;
-            System.out.println("Pix de R$ " + valor + " realizado!");  
-        }
+    static void realizarSaquePix(Cliente clientePagador, Cliente ClienteRecebedor, Double valorTransferencia) {
+        //aqui deve ficar apenas a redução do saldo do cliente pagador
+        //aumento do saldo do cliente recebedor
+        //a integração ao extrato deixa que eu faço (Miguel)
+        
     }
 
     //Fução do TED - Versão beta 1.0v (CASO MODIFICADO, ALTERAR A VERSÃO BETA PARA 1.1v!)
-    static void realizarSaqueTed(Cliente cliente) {
-        System.out.println("Digite o valor do TED: ");
-        double valor = leia.nextDouble();
-        //Valor da taxa do TED
-        double taxa = 15.67;
+    static void realizarSaqueTed(Cliente cliente, Double taxa) {
+        //
 
-        //Utilizando mesma estrategia do Pix
-        if(valor < 0) {
-            System.out.println("Valor Inválido");
-        }else if (valor + taxa > cliente.saldo) {
-            System.out.println("Saldo insuficiente");
-        }else{
-            //Aqui e quando o valor e a taxa se somam e logo é enviado para o cliente
-            cliente.saldo -= (valor + taxa);
-            System.out.println("TED de R$: " + valor + " Realido! Taxa: R$ " + taxa);
-        }
     }
 
     public static void main(String[] args){
@@ -96,8 +62,8 @@ public class Banco{
         cliente2.saldo = 1000.0;
         cliente2.senha = "senha-mais-secreta";
 
-        listaClientes[0]  = cliente1; // atribuindo ao array de lista clientes
-        listaClientes[1]  = cliente2; // atribuindo ao array de lista clientes
+        listaClientes[0]  = cliente1; 
+        listaClientes[1]  = cliente2; // O array listaClientes armazenará todos os clientes do nosso sistema
         while(true){
             Cliente clienteLogado; // Quando o login for realizado, vamos saber qual foi o cliente que logou
             System.out.println("Olá! Bem vindo ao sistema bancário do Weed Revela!");
@@ -152,7 +118,15 @@ public class Banco{
                         break;
                     case 2:
                         //aqui vai chamar a função de realizar depósito
-                        realizarDeposito(clienteLogado);
+                        System.out.print("Digite o valor que deseja depositar:");
+                        double valor = leia.nextDouble();
+                        if(valor<=0){
+                            System.out.print("Depósito Inválido!");
+                        }
+                        else{
+                            realizarDeposito(clienteLogado, valor);
+                            System.out.printf("Depósito de R$ %.2f%n realizado com sucesso!", valor);
+        }
                         break;
                     case 3:
                         
@@ -179,10 +153,41 @@ public class Banco{
                         
                         switch (menusaque) {
                             case 1:
-                                realizarSaquePix(clienteLogado);
+                                //faltou infomar para quem é o pix!
+                                // insira aqui para ele digitar a chave pix da pessoa que ele quer enviar o valor
+                                // verifique se a chave é válida, criei um campo em cliente chamado "chavePix"
+                                // percorra toda a lista de clientes, no atributo "chavePix" e veja se o usuário digitou a chave corretamente
+                                System.out.println("Digite o valor do Pix:");
+                                double valorPix = leia.nextDouble();
+                                //Caso o valor seja 0 ou menor que 0:
+                                if (valorPix <= 0) {
+                                    System.out.println("Valor Inválido!");
+                                //Caso o valor seja maior que o saldo do cliente
+                                }else if (valorPix > clienteLogado.saldo){
+                                    System.out.println("Saldo insuficiente!");
+                                //A realização do Pix
+                                }else{
+                                    //realizarSaquePix(clienteLogado); //dps ajeitem aqui
+                                }
                                 break;
                             case 2:
-                                realizarSaqueTed(clienteLogado);
+                                // primeiro precisa perguntar para o usuário qual a conta que ele quer transferir
+                                // Após ele digitar tudo, faça a validação. Se for correto, permita o usuário prosseguir ao pagamento
+                                // Caso algum dado seja incosistente, retorne ao ponto de partida.
+                                // O programa precisa dessas informações: CPF, conta e agência 
+                                System.out.println("Digite o valor do TED: ");
+                                double valorTED = leia.nextDouble();
+                                //Valor da taxa do TED eu mandei para dentro da função
+                                double taxa = 15.67;
+                                //Utilizando mesma estrategia do Pix
+                                if(valorTED < 0) {
+                                    System.out.println("Valor Inválido");
+                                }else if (valorTED + taxa > clienteLogado.saldo) {
+                                    System.out.println("Saldo insuficiente");
+                                }else{
+                                    //tirar esse comentário quando ajeitarem a função do TED abaixo
+                                    //realizarSaqueTed(clienteLogado);
+                                }
                                 break;
                         }
                         break;
