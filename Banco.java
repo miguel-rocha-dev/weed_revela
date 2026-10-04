@@ -38,10 +38,13 @@ public class Banco{
 
     }
 
-    //Fução do PIX - Versão beta 1.0v (CASO MODIFICADO, ALTERAR A VERSÃO BETA PARA 1.1v!)
+    //Fução do PIX - Versão beta 1.2v (CASO MODIFICADO, ALTERAR A VERSÃO BETA PARA 1.3v!)
     static void realizarTranferenciaPix(Cliente clientePagador, Cliente clienteRecebedor, Double valorTransferencia) {
-        //aqui deve ficar apenas a redução do saldo do cliente pagador
-        //aumento do saldo do cliente recebedor
+        //aqui esta a redução do saldo do cliente pagador (Lázaro)
+        clientePagador.saldo -= valorTransferencia;
+        //aqu esta o aumento do saldo do cliente recebedor (Lázaro)
+        clienteRecebedor.saldo += valorTransferencia;
+
         //a integração ao extrato deixa que eu faço (Miguel)
         Extrato extratoPagador = new Extrato();
         Extrato extratoRecebedor = new Extrato();
@@ -56,8 +59,11 @@ public class Banco{
 
     //Fução do TED - Versão beta 1.0v (CASO MODIFICADO, ALTERAR A VERSÃO BETA PARA 1.1v!)
     static void realizarTransferenciaTed(Cliente clientePagador, Double taxa, Cliente clienteRecebedor, Double valorTransferencia) {
-        //aqui deve ficar apenas a redução do saldo do cliente pagador
-        //aumento do saldo do cliente recebedor
+        //aqui deve ficar apenas a redução do saldo do cliente pagador (Lázaro)
+        clientePagador.saldo -= valorTransferencia + taxa;
+        //aumento do saldo do cliente recebedor (Lázaro)
+        clienteRecebedor.saldo += valorTransferencia;
+
         //a integração ao extrato deixa que eu faço (Miguel)
         Extrato extratoPagador = new Extrato();
         Extrato extratoRecebedor = new Extrato();
@@ -95,7 +101,7 @@ public class Banco{
         cliente1.agencia = "456";
         cliente1.saldo = 1000.0;
         cliente1.senha = "senha-secreta";
-        cliente1.senha = "chavepix2";
+        cliente1.chavePix = "chavepix2";
 
         Cliente cliente2 = new Cliente();
         cliente2.nome = "Cláudio";
@@ -104,7 +110,7 @@ public class Banco{
         cliente2.agencia = "789";
         cliente2.saldo = 1000.0;
         cliente2.senha = "senha-mais-secreta";
-        cliente2.senha = "chavepix1";
+        cliente2.chavePix = "chavepix1";
 
         listaClientes[0]  = cliente1; 
         listaClientes[1]  = cliente2; // O array listaClientes armazenará todos os clientes do nosso sistema
@@ -210,10 +216,28 @@ public class Banco{
                         
                         switch (menusaque) {
                             case 1:
-                                //faltou infomar para quem é o pix!
-                                // insira aqui para ele digitar a chave pix da pessoa que ele quer enviar o valor
-                                // verifique se a chave é válida, criei um campo em cliente chamado "chavePix"
-                                // percorra toda a lista de clientes, no atributo "chavePix" e veja se o usuário digitou a chave corretamente
+                                //primeiro precisa perguntar para o usuário qual a chave Pix do destinatário
+                                System.out.println("Digite a chave Pix do destinatário:");
+                                String chavePixDestinatario = leia.next();
+                                Cliente clienteRecebedor = null;
+
+                                //Aqui ele vai procurar o cliente que tem a chave pix digitada pelo usuário
+                                for (Cliente cliente : listaClientes) {
+                                    if (cliente.chavePix.equals(chavePixDestinatario)) {
+                                        clienteRecebedor = cliente;
+                                        break;
+                                    }
+                                }
+                                //Bora ver se essa bomba de chave pix existe ou não
+                                if (clienteRecebedor == null) {
+                                    System.out.println("Chave Pix inválida! Tente novamente.");
+                                    break;
+                                }
+                                //Um detalhe importante (miguel) é que o cliente não pode transferir para ele mesmo (útil viu, visionario não tem jeito)
+                                if (clienteRecebedor == clienteLogado) {
+                                    System.out.println("Você não pode transferir para você mesmo!");
+                                    break;
+                                }
                                 System.out.println("Digite o valor do Pix:");
                                 double valorPix = leia.nextDouble();
                                 //Caso o valor seja 0 ou menor que 0:
@@ -224,7 +248,8 @@ public class Banco{
                                     System.out.println("Saldo insuficiente!");
                                 //A realização do Pix
                                 }else{
-                                    //realizarSaquePix(clienteLogado); //dps ajeitem aqui
+                                    realizarTranferenciaPix(clienteLogado, clienteRecebedor, valorPix);
+                                    System.out.printf("Transferência de R$ %.2f realizada com sucesso para %s!\n", valorPix, clienteRecebedor.nome);
                                 }
                                 break;
                             case 2:
