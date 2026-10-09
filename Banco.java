@@ -253,22 +253,49 @@ public class Banco{
                                 }
                                 break;
                             case 2:
+                                Cliente clienteRecebedorTed = null;
                                 // primeiro precisa perguntar para o usuário qual a conta que ele quer transferir
-                                // Após ele digitar tudo, faça a validação. Se for correto, permita o usuário prosseguir ao pagamento
-                                // Caso algum dado seja incosistente, retorne ao ponto de partida.
+                                while (true) {
+                                    System.out.print("Digite o CPF: ");
+                                    String cpfTed = leia.next();
+
+                                    System.out.print("Digite a agência: ");
+                                    String agenciaTed = leia.next();
+
+                                    System.out.print("Digite a conta: ");
+                                    String contaTed = leia.next();
+
+                                    // Após ele digitar tudo, faça a validação. Se for correto, permita o usuário prosseguir ao pagamento
+                                    boolean dadosCorretos = false;
+                                    for (Cliente c : listaClientes){ //Para cada Cliente que eu to chamando temporariamente de c dentro de listaClientes, faça isso que eu to mandando
+                                        if (c.CPF.equals(cpfTed) && c.agencia.equals(agenciaTed) && c.conta.equals(contaTed)) { //O CPF do cliente e a agência do cliente e a conta do cliente batem com tudo o que o usuário acabou de digitar no terminal? o equal está verificando se tudo bate ;)
+                                            clienteRecebedorTed = c; 
+                                            dadosCorretos = true;
+                                            break;
+                                        }
+                                    }
+                                    // Caso algum dado seja incosistente, retorne ao ponto de partida.
+                                        if ((dadosCorretos && clienteRecebedorTed != clienteLogado)) {
+                                            System.out.println("Dados válidados com sucesso!");
+                                            break;
+                                        }
+                                        else{
+                                            System.out.println("DADOS INCONSISTENTES!");
+                                        }
+                                }
                                 // O programa precisa dessas informações: CPF, conta e agência 
                                 System.out.println("Digite o valor do TED: ");
                                 double valorTED = leia.nextDouble();
                                 //Valor da taxa do TED eu mandei para dentro da função
                                 double taxa = 15.67;
                                 //Utilizando mesma estrategia do Pix
-                                if(valorTED < 0) {
+                                if(valorTED <= 0) {
                                     System.out.println("Valor Inválido");
                                 }else if (valorTED + taxa > clienteLogado.saldo) {
-                                    System.out.println("Saldo insuficiente");
+                                    System.out.println("Saldo insuficiente");   
                                 }else{
-                                    //tirar esse comentário quando ajeitarem a função do TED abaixo
-                                    //realizarSaqueTed(clienteLogado);
+                                    realizarTransferenciaTed(clienteLogado, taxa, clienteRecebedorTed, valorTED);
+                                    System.out.printf("TED de R$ %.2f realizado com sucesso para %s!\n", valorTED, clienteRecebedorTed.nome);
                                 }
                                 break;
                         }
