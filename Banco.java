@@ -70,7 +70,7 @@ public class Banco{
         extratoPagador.tipoTrasacao = "Transferência";
         extratoRecebedor.tipoTrasacao = "Transferência";
         extratoPagador.valorMovimentacao = valorTransferencia+taxa; 
-        extratoRecebedor.valorMovimentacao = valorTransferencia+taxa;
+        extratoRecebedor.valorMovimentacao = valorTransferencia; //retirei a soma da taxa aqui pq como a taxa de TED é paga inteiramente por quem envia (o pagador), o recebedor só ganha o valorTransferencia puro (Enzo)
         clientePagador.listaExtratos.add(extratoPagador);
         clienteRecebedor.listaExtratos.add(extratoRecebedor);
     }
@@ -256,6 +256,7 @@ public class Banco{
                                 Cliente clienteRecebedorTed = null;
                                 // primeiro precisa perguntar para o usuário qual a conta que ele quer transferir
                                 while (true) {
+                                    clienteRecebedorTed = null; // adicionado agora pq limpa a variável a cada ciclo (Enzo)
                                     System.out.print("Digite o CPF: ");
                                     String cpfTed = leia.next();
 
