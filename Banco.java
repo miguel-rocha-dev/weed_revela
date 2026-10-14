@@ -34,8 +34,6 @@ public class Banco{
         extratoTemporario.tipoTrasacao = "Depósito";
         extratoTemporario.valorMovimentacao = valorDeposito;
         cliente.listaExtratos.add(extratoTemporario);
-        
-
     }
 
     //Fução do PIX - Versão beta 1.2v (CASO MODIFICADO, ALTERAR A VERSÃO BETA PARA 1.3v!)
@@ -54,7 +52,6 @@ public class Banco{
         extratoRecebedor.valorMovimentacao = valorTransferencia;
         clientePagador.listaExtratos.add(extratoPagador);
         clienteRecebedor.listaExtratos.add(extratoRecebedor);
-        
     }
 
     //Fução do TED - Versão beta 1.0v (CASO MODIFICADO, ALTERAR A VERSÃO BETA PARA 1.1v!)
@@ -76,10 +73,10 @@ public class Banco{
     }
 
     static Extrato maiorDeposito(Cliente cliente){
-        Extrato extratoMaiorDeposito = new Extrato();
+        Extrato extratoMaiorDeposito;
         extratoMaiorDeposito = cliente.listaExtratos.get(0);
         for (int i= 1; i < cliente.listaExtratos.size(); i++){
-            Extrato comparativo = new Extrato();
+            Extrato comparativo;
             comparativo = cliente.listaExtratos.get(i);
             if (comparativo.tipoTrasacao.equals("Depósito") && extratoMaiorDeposito.tipoTrasacao.equals("Depósito") ){
                 if(extratoMaiorDeposito.valorMovimentacao < comparativo.valorMovimentacao){
@@ -89,6 +86,14 @@ public class Banco{
         }
         
         return extratoMaiorDeposito;
+    }
+
+    static void realizarSaque(Cliente cliente, Double valor){
+        cliente.saldo -= valor;
+        Extrato clienteSaque =  new Extrato();
+        clienteSaque.tipoTrasacao = "Saque";        
+        clienteSaque.valorMovimentacao = valor;
+        cliente.listaExtratos.add(clienteSaque);
     }
 
     public static void main(String[] args){
@@ -114,12 +119,13 @@ public class Banco{
 
         listaClientes[0]  = cliente1; 
         listaClientes[1]  = cliente2; // O array listaClientes armazenará todos os clientes do nosso sistema
-        
+        Scanner leia = new Scanner(System.in);
+        saidaTotal:
         while(true){
             Cliente clienteLogado; // Quando o login for realizado, vamos saber qual foi o cliente que logou
             System.out.println("Olá! Bem vindo ao sistema bancário do Weed Revela!");
             System.out.println("Para prosseguir, Por favor, realize o login:");
-            Scanner leia = new Scanner(System.in);
+            
             validacao: // aqui eu criei um rótulo, pra n ficar preso dentro do loop de verificar o login
             while (true){
                 System.out.println("Digite o seu CPF sem pontos e traços: \n");
@@ -146,18 +152,21 @@ public class Banco{
                 System.out.println("4 - Exibir extrato");
                 System.out.println("5 - Mostrar maior depósito");
                 System.out.println("6 - Realizar transferência");
-                System.out.println("0 - Sair");
+                System.out.println("9 - Sair do sistema");
+                System.out.println("0 - Sair da conta");
                 System.out.println("Escolha uma opção:");
                 int opcao;
 
                 while(true){
                     opcao = leia.nextInt();
-                    if(List.of(1,2,3,4,5,6,0).contains(opcao)){
+                    if(List.of(1,2,3,4,5,6, 9,0).contains(opcao)){
                         break;
                     }
                     System.out.println("Opção inválida! Escreva novamente");
                 }
                 switch(opcao){ // depois trocar isso aqui por um RULE SWITCH
+                    case 9:
+                        break saidaTotal;
                     case 0:
                         System.out.println("até a próxima vez! \n");
                         break saidaMenu;
@@ -180,8 +189,19 @@ public class Banco{
                         }
                         break;
                     case 3:
+                        while(true){
+                            System.out.println("Digite o valor que você quer sacar");
+                            Double valorSaque = leia.nextDouble();
+                            if (valorSaque > clienteLogado.saldo){
+                                System.out.println("Valor inválido! Está tentando sacar mais do que você tem na sua conta!");
+                            }
+                            else{
+                                realizarSaque(clienteLogado, valorSaque);
+                                System.out.println("Saque realizado!");
+                                break;
+                            }
+                        }
                         
-                        // agora aqui é a função de realizar saque
                         break;
                     case 4:
                         // aqui é a função de exibir o extrato
@@ -304,5 +324,6 @@ public class Banco{
                 }
             }
         }
+        leia.close();
     }
 }
