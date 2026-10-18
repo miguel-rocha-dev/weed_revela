@@ -164,18 +164,23 @@ public class Banco{
                     System.out.println("Opção inválida! Escreva novamente");
                 }
                 switch(opcao){ // depois trocar isso aqui por um RULE SWITCH
-                    case 9:
+                    case 9 ->{
                         break saidaTotal;
-                    case 0:
+
+                    }
+                    case 0 ->{
                         System.out.println("até a próxima vez! \n");
                         break saidaMenu;
+                    }
 
-                    case 1:
+                    case 1 -> {
                         //aqui vai chamar a função de consultar saldo
                         Double saldoAtual = consultarSaldo(clienteLogado);
                         System.out.printf("\nSeu saldo atual é: R$ %.2f\n\n", saldoAtual);
                         break;
-                    case 2:
+                    }
+                        
+                    case 2 ->{
                         //aqui vai chamar a função de realizar depósito
                         System.out.print("Digite o valor que deseja depositar:");
                         double valor = leia.nextDouble();
@@ -187,7 +192,9 @@ public class Banco{
                             System.out.printf("Depósito de R$ %.2f%n realizado com sucesso!", valor);
                         }
                         break;
-                    case 3:
+                    }
+                        
+                    case 3 ->{
                         while(true){
                             System.out.println("Digite o valor que você quer sacar");
                             Double valorSaque = leia.nextDouble();
@@ -202,7 +209,9 @@ public class Banco{
                         }
                         
                         break;
-                    case 4:
+                    }
+                        
+                    case 4 ->{
                         // aqui é a função de exibir o extrato
                         System.out.println("-------------------------------------------");
                         for( Extrato item : clienteLogado.listaExtratos){
@@ -211,7 +220,9 @@ public class Banco{
                             System.out.println("------------------------------------------- \n");
                         }
                         break;
-                    case 5:
+                    }
+                        
+                    case 5 ->{
                         // aqui vai mostrar o maior depósito já realizado
                         Extrato maiorDepRealizado = maiorDeposito(clienteLogado);
                         if(maiorDepRealizado.tipoTrasacao.equals("Depósito")){
@@ -225,7 +236,9 @@ public class Banco{
                         }
 
                         break;
-                    case 6:
+                    }
+                        
+                    case 6->{
                         System.out.println("1 - Realizar por PIX");
                         System.out.println("2 - Transferecia por TED");
                         System.out.println("Escolha uma opção:");
@@ -239,7 +252,7 @@ public class Banco{
                         }
                         
                         switch (menusaque) {
-                            case 1:
+                            case 1 ->{
                                 //primeiro precisa perguntar para o usuário qual a chave Pix do destinatário
                                 System.out.println("Digite a chave Pix do destinatário:");
                                 String chavePixDestinatario = leia.next();
@@ -276,7 +289,9 @@ public class Banco{
                                     System.out.printf("Transferência de R$ %.2f realizada com sucesso para %s!\n", valorPix, clienteRecebedor.nome);
                                 }
                                 break;
-                            case 2:
+                            }
+                                
+                            case 2 ->{
                                 Cliente clienteRecebedorTed = null;
                                 // primeiro precisa perguntar para o usuário qual a conta que ele quer transferir
                                 while (true) {
@@ -316,6 +331,8 @@ public class Banco{
                                 //Utilizando mesma estrategia do Pix
                                 if(valorTED <= 0) {
                                     System.out.println("Valor Inválido");
+                                }else if (clienteRecebedorTed == null) {
+                                    System.out.println("Destinatário inválido");
                                 }else if (valorTED + taxa > clienteLogado.saldo) {
                                     System.out.println("Saldo insuficiente");   
                                 }else{
@@ -323,8 +340,12 @@ public class Banco{
                                     System.out.printf("TED de R$ %.2f realizado com sucesso para %s!\n", valorTED, clienteRecebedorTed.nome);
                                 }
                                 break;
+                            }
+                                
                         }
                         break;
+                    }
+                        
                 }
             }
         }
