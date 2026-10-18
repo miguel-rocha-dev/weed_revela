@@ -84,7 +84,6 @@ public class Banco{
                 }
            }
         }
-        
         return extratoMaiorDeposito;
     }
 
@@ -181,7 +180,7 @@ public class Banco{
                         System.out.print("Digite o valor que deseja depositar:");
                         double valor = leia.nextDouble();
                         if(valor<=0){
-                            System.out.print("Depósito Inválido!");
+                            System.out.print("Depósito Inválido! \n");
                         }
                         else{
                             realizarDeposito(clienteLogado, valor);
@@ -192,7 +191,7 @@ public class Banco{
                         while(true){
                             System.out.println("Digite o valor que você quer sacar");
                             Double valorSaque = leia.nextDouble();
-                            if (valorSaque > clienteLogado.saldo){
+                            if (valorSaque > clienteLogado.saldo || valorSaque <= 0){
                                 System.out.println("Valor inválido! Está tentando sacar mais do que você tem na sua conta!");
                             }
                             else{
@@ -215,10 +214,15 @@ public class Banco{
                     case 5:
                         // aqui vai mostrar o maior depósito já realizado
                         Extrato maiorDepRealizado = maiorDeposito(clienteLogado);
-                        System.out.println("-------------------------------------------");
-                        System.out.println("Tipo do depósito: " + maiorDepRealizado.tipoTrasacao);
-                        System.out.println("Valor: R$" + maiorDepRealizado.valorMovimentacao);
-                        System.out.println("-------------------------------------------");
+                        if(maiorDepRealizado.tipoTrasacao.equals("Depósito")){
+                            System.out.println("-------------------------------------------");
+                            System.out.println("Tipo do depósito: " + maiorDepRealizado.tipoTrasacao);
+                            System.out.println("Valor: R$" + maiorDepRealizado.valorMovimentacao);
+                            System.out.println("-------------------------------------------");
+                        }
+                        else{
+                            System.out.println("Não foi realizado nenhum tipo de depósito! \n");
+                        }
 
                         break;
                     case 6:
